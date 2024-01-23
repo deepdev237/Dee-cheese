@@ -229,6 +229,7 @@
                     let inventory = JSON.parse(localStorage.getItem("inventory"));
                     if (inventory == null) {
                         inventory = [];
+                        localStorage.setItem("inventory", JSON.stringify(inventory));
                     }
                     let noUpgrades = false;
                     for (let i = 0; i < inventory.length; i++) {
@@ -249,7 +250,7 @@
                             noUpgrades = true;
                         }
                     }
-                    if (noUpgrades) {
+                    if (noUpgrades || inventory.length == 0) {
                         addMoney(1);
                     }
                 }
