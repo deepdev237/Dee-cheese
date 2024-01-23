@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>deepcheese</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(to right, #f9d423 0%, #f83600 100%);
+            color: #fff;
+            padding: 10px;
+        }
+
+        .navbar ul {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .navbar-left {
+            display: flex;
+            justify-content: center;
+            flex-grow: 1;
+        }
+
+        .account {
+            display: flex;
+            align-items: center;
+        }
+
+        #moneyBalance {
+            margin-left: 10px;
+            color: #00ff00; /* Change to desired color */
+        }
+
+        .navbar ul li {
+            padding: 0 10px;
+        }
+
+        .navbar ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 1.2em;
+        }
+        
+        .navbar ul li:hover {
+            background-color: #555;
+        }
+
+        .navbar ul li a:hover {
+            color: #ffbb32;
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .content h1 {
+            font-size: 3em;
+            margin: 0;
+        }
+
+        .content p {
+            font-size: 1.2em;
+        }
+
+        #cheeseGame {
+            width: 80%;
+            height: 500px;
+            position: relative;
+            border: 2px solid #333;
+            margin: 10px 0;
+        }
+
+        #cheeseGame img {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 100px;
+            
+        }
+
+        #cheese {
+            user-select: none !important;
+        }
+
+        #cheeseGame img {
+            user-select: none !important;
+        }
+
+        #cheeseGame img:hover {
+            cursor: pointer;
+        }
+
+        .footer {
+            margin-top: auto;
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body id="dynamic-bg">
+    <!-- <audio id="eatSound" src="eatSound.mp3"></audio> -->
+
+    <div class="navbar">
+        <ul>
+            <div class="navbar-left">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="inventory.html">Inventory</a></li>
+            </div>
+            <li><a href="cart.html">Cart</a></li>
+            <li class="account">
+                <a href="account.html">Account</a>
+                <span id="moneyBalance">0</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="content">
+        <h1></h1>
+        <div id="cheeseGame">
+            cheese game
+            (you eat the cheese by clicking on it)
+        </div>
+        <p>The cheese shop's grandeur is only surpassed by its exceptional cheeses. Get money by eating the free cheese here. If you have enough you can upgrade so you make more by eating the free cheese.</p>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2024 DEEPCHESE COMPANY LLC. All rights reserved.</p>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        function createParticles(x, y) {
+            var particleCount = 50;
+            for (var i = 0; i < particleCount; i++) {
+                var particle = document.createElement('div');
+                particle.style.position = 'absolute';
+                particle.style.width = '5px';
+                particle.style.height = '5px';
+                particle.style.background = 'hsl(' + (Math.random() * 360) + ', 100%, 50%)';
+                particle.style.borderRadius = '50%'; // Make the particles round
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                cheeseGame.appendChild(particle);
+
+                var angle = Math.random() * 2 * Math.PI; // Random angle
+                var speed = Math.random() * 3 + 1; // Reduce the speed
+
+                var particleAnimation = setInterval(function() {
+                    var vx = speed * Math.cos(angle); // Velocity x
+                    var vy = speed * Math.sin(angle); // Velocity y
+                    var particleLeft = parseFloat(particle.style.left); // Current left position
+                    var particleTop = parseFloat(particle.style.top); // Current top position
+                    particleLeft += vx; // Update the left position
+                    particleTop += vy; // Update the top position
+                    vy += 0.1; // Gravity
+
+                    // Delete the particle when it goes out of the border
+                    if (particleLeft < 0 || particleLeft > cheeseGame.offsetWidth || particleTop < 0 || particleTop > cheeseGame.offsetHeight) {
+                        //cheeseGame.removeChild(particle);
+                        //clearInterval(particleAnimation);
+                    } else {
+                        particle.style.left = particleLeft + 'px';
+                        particle.style.top = particleTop + 'px';
+                    }
+                }, 10);
+            }
+        }
+
+        window.onload = function() {
+            GetCart();
+
+            var cheeseGame = document.getElementById('cheeseGame');
+            var cheese = document.createElement('img');
+            cheese.src = 'https://pngimg.com/uploads/cheese/cheese_PNG25292.png';
+            cheese.style.position = 'absolute';
+            cheese.style.width = '100px';
+            cheese.style.height = '100px';
+            cheese.id = 'cheese';
+            cheeseGame.appendChild(cheese);
+
+            cheese.addEventListener('mousedown', function(event) {
+                event.preventDefault();
+            });
+
+            function randomPosition(element) {
+                var borderWidth = 2; // width of the border
+                var y = cheeseGame.offsetHeight - element.offsetHeight - 2 * borderWidth;
+                var x = cheeseGame.offsetWidth - element.offsetWidth - 2 * borderWidth;
+                var randomX = Math.floor(Math.random() * x) + borderWidth;
+                var randomY = Math.floor(Math.random() * y) + borderWidth;
+                return [randomX,randomY];
+            }
+
+            cheese.onclick = function() {
+                var size = parseInt(cheese.style.width);
+                if (size > 50) {
+                    cheese.style.width = (size - 10) + 'px';
+                    cheese.style.height = (size - 10) + 'px';
+                } else {
+                    var xy = randomPosition(cheese);
+                    cheese.style.left = xy[0] + 'px';
+                    cheese.style.top = xy[1] + 'px';
+                    cheese.style.width = '100px';
+                    cheese.style.height = '100px';
+
+                    //check the inventory of upgrades and apply them
+                    //silver, gold, diamond
+                    let inventory = JSON.parse(localStorage.getItem("inventory"));
+                    for (let i = 0; i < inventory.length; i++) {
+                        console.log(inventory[i]);
+                        if (inventory[i].name == "Upgrade Silver") {
+                            let quantity = inventory[i].quantity;
+                            let amountToAdd = 5 * quantity;
+                            addMoney(amountToAdd);
+                        } else if (inventory[i].name == "Upgrade Gold") {
+                            let quantity = inventory[i].quantity;
+                            let amountToAdd = 10 * quantity;
+                            addMoney(amountToAdd);
+                        } else if (inventory[i].name == "Upgrade Diamond") {
+                            let quantity = inventory[i].quantity;
+                            let amountToAdd = 20 * quantity;
+                            addMoney(amountToAdd);
+                        }
+                    }
+                }
+
+                cheese.classList.add('eating');
+                setTimeout(function() {
+                    cheese.classList.remove('eating');
+                }, 200); // same duration as the animation
+
+                //eatSound.play();
+                createParticles(parseInt(cheese.style.left), parseInt(cheese.style.top));
+            }
+        }
+    </script>
+</body>
+</html>

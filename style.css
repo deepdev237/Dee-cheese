@@ -1,0 +1,146 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.navbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to right, #f9d423 0%, #f83600 100%);
+    color: #fff;
+    padding: 10px;
+}
+
+.navbar ul {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    list-style-type: none;
+    padding: 0;
+}
+
+.navbar-left {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+}
+
+.account {
+    display: flex;
+    align-items: center;
+}
+
+#moneyBalance {
+    margin-left: 10px;
+    color: #00ff00; /* Change to desired color */
+}
+
+.navbar ul li {
+    padding: 0 10px;
+}
+
+.navbar ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 1.2em;
+}
+
+.navbar ul li:hover {
+    background-color: #555;
+}
+
+.navbar ul li a:hover {
+    color: #ffbb32;
+}
+
+.content p {
+    font-size: 1.2em;
+}
+
+#cheeseGame {
+    width: 80%;
+    height: 500px;
+    position: relative;
+    border: 2px solid #333;
+    margin: 10px 0;
+}
+
+#cheeseGame img {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100px;
+    height: 100px;
+}
+
+.content {
+    display: flex;
+    flex-direction: wrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.content h1 {
+    font-size: 3em;
+    margin: 0;
+    text-align: center;
+}
+
+.product-card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px;
+    padding: 20px;
+    width: calc(33% - 40px);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.product-card h2 {
+    margin-top: 0;
+    text-align: center;
+}
+
+.product-card p {
+    text-align: center;
+}
+
+/*
+.content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.product-card {
+    flex: 0 0 calc(33.33% - 40px);
+    box-sizing: border-box;
+    margin: 10px;
+    /* ...other styles...
+}
+*/
+
+#cheese {
+    user-select: none !important;
+}
+
+#cheeseGame img {
+    user-select: none !important;
+}
+
+#cheeseGame img:hover {
+    cursor: pointer;
+}
+
+.footer {
+    margin-top: auto;
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+}

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>deepcheese Cart</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body id="dynamic-bg">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 10px 20px;
+        }
+
+        .navbar a {
+            color: #ecf0f1;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
+        .content {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        .cart {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .cart-item {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px;
+            width: 250px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .cart-item img {
+            max-width: 100%;
+            max-height: 150px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+
+        .cart-item h3 {
+            margin: 10px 0;
+        }
+
+        .cart-item p {
+            margin: 0;
+        }
+
+        .cart-item label {
+            margin-top: 10px;
+        }
+
+        footer {
+            text-align: center;
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+
+    <div class="navbar">
+        <ul>
+            <div class="navbar-left">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="inventory.html">Inventory</a></li>
+            </div>
+            <li><a href="cart.html">Cart</a></li>
+            <li class="account">
+                <a href="account.html">Account</a>
+                <span id="moneyBalance">0</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="content">
+        <form class="cart">
+            <div class="cart-item">
+                <img src="img/Whimsical Wonder Cheese.png" alt="Cheese 1">
+                <h3>Whimsical Wonder Cheese</h3>
+                <p>$199</p>
+                <label for="quantity">Quantity:</label>
+                <input type="number" id="quantity" name="quantity" value="1" min="0">
+                <button>Remove</button>
+            </div>
+
+            <div class="cart-item">
+                <img src="img/Enchantingly Eccentric Cheese.jpg" alt="Cheese 2">
+                <h3>Enchantingly Eccentric Cheese</h3>
+                <p>$399</p>
+                <label for="quantity">Quantity:</label>
+                <input type="number" id="quantity" name="quantity" value="1" min="0">
+                <button>Remove</button>
+            </div>
+        </form>
+        <div class="submitForm">
+            <button>Empty Cart</button>
+            <button>Checkout</button>
+
+            <p id="total">Total: </p>
+        </div>
+    </div>
+
+    <footer>
+        <p>2024 DEEPCHEESE COMPANY LLC. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        //name, price, img, description
+
+        function EmptyCart() {
+            localStorage.setItem('cart', JSON.stringify([]));
+
+            let cart = document.querySelector('.cart');
+            cart.innerHTML = '';
+        }
+
+        function UpdateTotal() {
+            let total = 0;
+            let cart = JSON.parse(localStorage.getItem('cart'));
+
+            for (let i = 0; i < cart.length; i++) {
+                total += cart[i].price * cart[i].quantity;
+            }
+
+            let totalElement = document.querySelector('#total');
+            totalElement.innerHTML = 'Total: $' + total;
+
+            return total;
+        }
+
+        function BuyItem(name, price, img, description, quantity) {
+            //get cart from local storage
+            let cart = JSON.parse(localStorage.getItem('cart'));
+
+            //create item object
+            let item = {
+                name: name,
+                price: price,
+                img: img,
+                description: description,
+                quantity: quantity
+            };
+
+            //add item to inventory
+            //get inventory
+            let inventory = JSON.parse(localStorage.getItem('inventory'));
+
+            //loop through inventory
+            //check if inventory has any of the products we are buying
+            //if it does we add one to the quantity of the item
+            //if it doesn't we add the item to the inventory
+            let found = false;
+
+            for (let i = 0; i < inventory.length; i++) {
+                if (inventory[i].name == name) {
+                    inventory[i].quantity += quantity;
+                    found = true;
+                }
+            }
+
+            if (!found) {
+                inventory.push(item);
+            }
+
+            //update inventory in local storage
+            localStorage.setItem('inventory', JSON.stringify(inventory));
+        }
+
+        function fillUpCart() {
+            //empty form class cart
+            let cart = document.querySelector('.cart');
+            cart.innerHTML = '';
+
+            //get cart from local storage
+            let cartItems = JSON.parse(localStorage.getItem('cart'));
+
+            //loop through cart items
+            for (let i = 0; i < cartItems.length; i++) {
+                //create div element
+                let cartItem = document.createElement('div');
+                cartItem.classList.add('cart-item');
+
+                //create img element
+                let img = document.createElement('img');
+                img.src = cartItems[i].img;
+                img.alt = cartItems[i].name;
+
+                //create h3 element
+                let h3 = document.createElement('h3');
+                h3.innerHTML = cartItems[i].name;
+
+                //create p element
+                let p = document.createElement('p');
+                p.innerHTML = '$' + cartItems[i].price;
+
+                //create label element
+                let label = document.createElement('label');
+                label.setAttribute('for', 'quantity');
+                label.innerHTML = 'Quantity:';
+
+                //create input element
+                let input = document.createElement('input');
+                input.setAttribute('type', 'number');
+                input.setAttribute('name', 'quantity');
+                input.setAttribute('id', 'quantity');
+                console.log(cartItems[i].quantity);
+                input.setAttribute('value', cartItems[i].quantity);
+                input.setAttribute('min', '0');
+
+                //quantity listen for change event and update local storage
+                input.addEventListener('change', function() {
+                    //get cart from local storage
+                    let cartItems = JSON.parse(localStorage.getItem('cart'));
+
+                    //update quantity
+                    cartItems[i].quantity = input.value;
+
+                    //update cart in local storage
+                    localStorage.setItem('cart', JSON.stringify(cartItems));
+
+                    //update total
+                    UpdateTotal();
+                });
+
+                //create button element
+                let button = document.createElement('button');
+                button.innerHTML = 'Remove';
+
+                //add event listener to button
+                //REMOVING ITEM FROM CART
+                button.addEventListener('click', function() {
+                    //get cart from local storage
+                    let cartItems = JSON.parse(localStorage.getItem('cart'));
+
+                    //remove item from cart
+                    cartItems.splice(i, 1);
+
+                    //update cart in local storage
+                    localStorage.setItem('cart', JSON.stringify(cartItems));
+
+                    //update cart in html
+                    fillUpCart();
+
+                    //update total
+                    UpdateTotal();
+                });
+
+                //append elements to cartItem
+                cartItem.appendChild(img);
+                cartItem.appendChild(h3);
+                cartItem.appendChild(p);
+                cartItem.appendChild(label);
+                cartItem.appendChild(input);
+                cartItem.appendChild(button);
+
+                //append cartItem to cart
+                cart.appendChild(cartItem);
+            }
+        }
+
+        //empty cart button
+        let emptyCartButton = document.querySelector('.submitForm button:first-of-type');
+        emptyCartButton.addEventListener('click', function() {
+            EmptyCart();
+            UpdateTotal();
+        });
+
+        //checkout button
+        let checkoutButton = document.querySelector('.submitForm button:last-of-type');
+        checkoutButton.addEventListener('click', function() {
+            //get total
+            let total = UpdateTotal();
+
+            //get money balance
+            let moneyBalance = parseInt(document.querySelector('#moneyBalance').innerHTML);
+
+            //check if money balance is greater than total
+            if (moneyBalance >= total) {
+                removeMoney(total);
+
+                let cart = GetCart();
+
+                //loop through cart
+                for (let i = 0; i < cart.length; i++) {
+                    //buy item
+                    BuyItem(cart[i].name, cart[i].price, cart[i].img, cart[i].description, cart[i].quantity);
+                }
+
+                //empty cart
+                EmptyCart();
+
+                //update total
+                UpdateTotal();
+            } else {
+                alert('You do not have enough money to checkout!');
+            }
+        });
+
+        window.onload = function() {
+            GetCart();
+            fillUpCart();
+            UpdateTotal();
+        }
+    </script>
+</body>
+</html>

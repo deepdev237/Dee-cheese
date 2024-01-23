@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Account Page</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body id="dynamic-bg">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        h1 {
+            text-align: center;
+            padding: 20px;
+        }
+
+        form {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            margin: 20px auto;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        input[type="submit"] {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+    
+    <div class="navbar">
+        <ul>
+            <div class="navbar-left">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="inventory.html">Inventory</a></li>
+            </div>
+            <li><a href="cart.html">Cart</a></li>
+            <li class="account">
+                <a href="account.html">Account</a>
+                <span id="moneyBalance">0</span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="content">
+
+    </div>
+
+    <div class="footer">
+        <p>2024 DEEPCHESE COMPANY LLC. All rights reserved.</p>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

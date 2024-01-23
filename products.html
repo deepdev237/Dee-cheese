@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Products - DeepCheese</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body id="dynamic-bg">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(to right, #f9d423 0%, #f83600 100%);
+            color: #fff;
+            padding: 10px;
+        }
+
+        .navbar ul {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .navbar-left {
+            display: flex;
+            justify-content: center;
+            flex-grow: 1;
+        }
+
+        .account {
+            display: flex;
+            align-items: center;
+        }
+
+        #moneyBalance {
+            margin-left: 10px;
+            color: #00ff00; /* Change to desired color */
+        }
+
+        .navbar ul li {
+            padding: 0 10px;
+        }
+
+        .navbar ul li a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 1.2em;
+        }
+
+        .navbar ul li:hover {
+            background-color: #555;
+        }
+
+        .navbar ul li a:hover {
+            color: #ffbb32;
+        }
+
+        .content h1 {
+            font-size: 3em;
+            margin: 0;
+        }
+
+        .content p {
+            font-size: 1.2em;
+        }
+
+        #cheeseGame {
+            width: 80%;
+            height: 500px;
+            position: relative;
+            border: 2px solid #333;
+            margin: 10px 0;
+        }
+
+        #cheeseGame img {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100px;
+            height: 100px;
+        }
+
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .product-card {
+            flex: 0 0 calc(33.33% - 40px);
+            box-sizing: border-box;
+            margin: 10px;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+            border-radius: 10px;
+            background: linear-gradient(to right, #ff9966, #ff5e62);
+        }
+
+        .product-card img {
+            max-width: 100%;
+            max-height: 200px; /* Adjust this value as needed */
+            object-fit: contain; /* This will ensure that the image maintains its aspect ratio */
+        }
+
+        #cheese {
+            user-select: none !important;
+        }
+
+        #cheeseGame img {
+            user-select: none !important;
+        }
+
+        #cheeseGame img:hover {
+            cursor: pointer;
+        }
+
+        .product-card h2 {
+            margin-top: 0;
+        }
+
+        .footer {
+            margin-top: auto;
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+
+    <div class="navbar">
+        <ul>
+            <div class="navbar-left">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="inventory.html">Inventory</a></li>
+            </div>
+            <li><a href="cart.html">Cart</a></li>
+            <li class="account">
+                <a href="account.html">Account</a>
+                <span id="moneyBalance">0</span>
+            </li>
+        </ul>
+    </div>
+ 
+    <div class="content">
+    </div>
+
+    <div class="footer">
+        <p>2024 DEEPCHESE COMPANY LLC. All rights reserved.</p>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+
+        let products = [
+            {
+                "name": "Whimsical Wonder Cheese",
+                "description": "Behold the Whimsical Wonder Cheese! It defies all cheese norms with its mysterious aura. Legend has it that each bite transports you to a land of cheese dreams.",
+                "price": 199,
+                "img": "img/Whimsical Wonder Cheese.png"
+            },
+            {
+                "name": "Enchantingly Eccentric Cheese",
+                "description": "Dive into the enchanting world of the Enchantingly Eccentric Cheese. This cheese is so unique that it once beat a ninja in a game of hide and seek. True story!",
+                "price": 399,
+                "img": "img/Enchantingly Eccentric Cheese.jpg"
+            },
+            {
+                "name": "Supernova Cheese Extravaganza",
+                "description": "Prepare yourself for the Supernova Cheese Extravaganza! This cheese is so extraordinary that it once hosted its own talk show with famous mice as guests.",
+                "price": 799,
+                "img": "img/Supernova Cheese Extravaganza.jpg"
+            },
+            {
+                "name": "Galactic Gouda Galore",
+                "description": "Embark on a cosmic journey with the Galactic Gouda Galore. Legend has it that astronauts take a slice of this cheese to keep them company on space missions.",
+                "price": 1299,
+                "img": "img/Galactic Gouda Galore.jpg"
+            },
+            {
+                "name": "Whacky Wonderland Cheese",
+                "description": "Step into the whimsical world of the Whacky Wonderland Cheese. Rumor has it that this cheese once taught a stand-up comedy class to crackers.",
+                "price": 1999,
+                "img": "img/Whacky Wonderland Cheese.jpg"
+            },
+            {
+                "name": "Zany Zest Zinger Cheese",
+                "description": "Get ready for a burst of flavor with the Zany Zest Zinger Cheese! This cheese is so lively that it once danced the salsa with a wheel of spicy pepper jack.",
+                "price": 2999,
+                "img": "img/Zany Zest Zinger Cheese.jpg"
+            },
+            {
+                "name": "Epic Laugh-a-Lot Cheese",
+                "description": "Prepare for an epic cheese experience with the Laugh-a-Lot Cheese! This cheese is so funny that it once told a joke so good, even the mice couldn't stop laughing.",
+                "price": 6999,
+                "img": "img/Epic Laugh-a-Lot Cheese.jpg"
+            },
+            {
+                "name": "Ultra Mega Haha Horny Cheese",
+                "description": "Ultra Mega Haha Horny Cheese!🍆 Experience the pinnacle of cheese erotica - irresistibly alluring! This is no ordinary cheese, it's an experience, a lifestyle, a gastronomic adventure that will leave you craving more. Let the Ultra Mega Haha Horny Cheese awaken your taste buds and seduce your senses. Hard to resist, impossible to forget. ",
+                "price": 14999,
+                "img": "img/Ultra Mega Haha Horny Cheese.jpg"
+            },
+            { // this is the last product
+                "name": "Cheeseception Masterpiece",
+                "description": "Prepare yourself for the ultimate cheese adventure with the Cheeseception Masterpiece! This cheese is so mind-bogglingly special that it once played chess with Einstein (and won).",
+                "price": 29999,
+                "img": "img/Cheeseception Masterpiece.jpg"
+            },
+
+            //game upgrades
+
+            {
+                "name": "Upgrade Silver", // this is the first upgrade
+                "description": "This upgrade will increase your reward for eating cheese by 5 money/quantity.",
+                "price": 35,
+                "img": "img/Silver.jpg"
+            },
+
+            {
+                "name": "Upgrade Gold", // this is the second upgrade
+                "description": "This upgrade will increase your reward for eating cheese by 10 money/quantity.",
+                "price": 100,
+                "img": "img/Gold.jpg"
+            },
+
+            {
+                "name": "Upgrade Diamond", // this is the third upgrade
+                "description": "This upgrade will increase your reward for eating cheese by 20 money/quantity.",
+                "price": 500,
+                "img": "img/Diamond.jpg"
+            },
+        ]
+
+        GetCart();
+
+        // insert the cards using the products array
+        let content = document.querySelector(".content");
+        for (let i = 0; i < products.length; i++) {
+            let card = document.createElement("div");
+            card.classList.add("product-card");
+            card.innerHTML = `
+                <h2>${products[i].name}</h2>
+                <p>${products[i].description}</p>
+                <img src="${products[i].img}">
+                <p>$${products[i].price}</p>
+                <button>Buy</button>
+            `;
+            content.appendChild(card);
+        }
+
+        // Add event listener to buy buttons
+        let buyButtons = document.querySelectorAll('.product-card button');
+        for (let i = 0; i < buyButtons.length; i++) {
+            buyButtons[i].addEventListener('click', function() {
+                let product = products[i];
+                AddToCart(product.name, product.price, product.img, product.description);
+            });
+        }
+
+        
+    </script>
+</body>
+</html>
