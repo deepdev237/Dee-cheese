@@ -227,7 +227,7 @@
                     //check the inventory of upgrades and apply them
                     //silver, gold, diamond
                     let inventory = JSON.parse(localStorage.getItem("inventory"));
-                    let noUpgrades = true;
+                    let noUpgrades = false;
                     for (let i = 0; i < inventory.length; i++) {
                         console.log(inventory[i]);
                         if (inventory[i].name == "Upgrade Silver") {
@@ -242,6 +242,8 @@
                             let quantity = inventory[i].quantity;
                             let amountToAdd = 20 * quantity;
                             addMoney(amountToAdd);
+                        } else {
+                            noUpgrades = true;
                         }
                     }
                     if (noUpgrades) {
