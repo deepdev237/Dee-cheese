@@ -255,12 +255,16 @@
         let buyButtons = document.querySelectorAll('.product-card button');
         for (let i = 0; i < buyButtons.length; i++) {
             buyButtons[i].addEventListener('click', function() {
-                let product = products[i];
-                AddToCart(product.name, product.price, product.img, product.description);
+                // check if you are logged in
+                let loggedIn = localStorage.getItem("loggedIn");
+                if (loggedIn == null) {
+                    alert("You must be logged in to buy products.");
+                } else {
+                    let product = products[i];
+                    AddToCart(product.name, product.price, product.img, product.description);
+                }
             });
         }
-
-        
     </script>
 </body>
 </html>

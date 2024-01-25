@@ -29,14 +29,6 @@ function removeMoney(amount) {
     setMoney(parseInt(moneyBalance) - amount);
 }
 
-// get the money balance from the localStorage
-let moneyBalance = getMoney();
-if (moneyBalance == null) {
-    setMoney(0);
-} else {
-    setMoney(moneyBalance);
-}
-
 function GetCart() {
     let cart = localStorage.getItem('cart');
 
@@ -127,3 +119,98 @@ function UpdateCart() {
     UpdateTotal()
 }
 
+function SignUp (username, password) {
+    // Get the user from local storage
+    let user = localStorage.getItem('user');
+
+    // If there are no user, create an empty array
+    if (user === null) {
+        user = [];
+    } else {
+        // If the user is not null, parse it as JSON
+        user = JSON.parse(user);
+    }
+
+    // Add the new user to the user array
+    user.push({ username, password });
+
+    // Save the user back to local storage
+    localStorage.setItem('user', JSON.stringify(user));
+
+    // Return the new user
+    return { username, password };
+}
+
+function getUser() {
+    let user = localStorage.getItem('user');
+
+    if (user === null) {
+        user = [];
+        localStorage.setItem('user', JSON.stringify(user));
+    } else {
+        // If the user is not null, parse it as JSON
+        user = JSON.parse(user);
+    }
+
+    return user;
+}
+
+function Login(username, password) {
+    let user = getUser();
+
+    if (user.username === username && user.password === password) {
+        return true;
+    }
+
+    // set loggedIn to true
+    localStorage.setItem('loggedIn', true);
+
+    return false;
+}
+
+function Logout() {
+    localStorage.setItem('loggedIn', false);
+}
+
+window.onload = function () {
+
+    console.log("onload");
+    // get the money balance from the localStorage and set it to display only if logged in
+    let loggedIn = localStorage.getItem("loggedIn");
+    let user = JSON.parse(localStorage.getItem("user"));
+
+    if (loggedIn === null) {
+        loggedIn = "false";
+        localStorage.setItem("loggedIn", loggedIn);
+    }
+
+    if (loggedIn === "true") {
+        document.querySelector("#moneyBalance").innerHTML = getMoney();
+    }
+    // if not logged in, hide the money balance
+    if (loggedIn === "false") {
+        document.querySelector("#moneyBalance").style.display = "none";
+    }
+    // if not logged in and there is a user in localStorage change <a href="account.html">Account</a> innerHTML to Login
+    if (loggedIn === "false" && user !== null) {
+        let account = document.querySelector(".account");
+        let accountLink = account.querySelector("a");
+        accountLink.innerHTML = "Login";
+    }
+    // if not logged in and there is no user in localStorage change <a href="account.html">Account</a> innerHTML to Sign Up
+    if (loggedIn === "false" && user === null) {
+        let account = document.querySelector(".account");
+        console.log(account);
+        let accountLink = account.querySelector("a");
+        console.log(accountLink);
+        accountLink.innerHTML = "Sign Up";
+    }
+    // if logged in and there is a user in localStorage change <a href="account.html">Account</a> innerHTML to the username
+    if (loggedIn === "true" && user !== null) {
+        let account = document.querySelector(".account");
+        let accountLink = account.querySelector("a");
+
+        let user = JSON.parse(user);
+        accountLink.innerHTML = user.username;
+    }
+}

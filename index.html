@@ -140,7 +140,7 @@
     </div>
 
     <div class="footer">
-        <p>&copy; 2024 DEEPCHESE COMPANY LLC. All rights reserved.</p>
+        <p>2024 DEEPCHESE COMPANY LLC. All rights reserved.</p>
     </div>
 
     <script src="script.js"></script>
@@ -181,8 +181,8 @@
                 }, 10);
             }
         }
-
-        window.onload = function() {
+        
+        window.addEventListener("load", function () {
             GetCart();
 
             var cheeseGame = document.getElementById('cheeseGame');
@@ -208,6 +208,10 @@
             }
 
             cheese.onclick = function() {
+                if (!localStorage.getItem("loggedIn")) {
+                    alert("Please sign up or log in to play the cheese game.");
+                    return;
+                }
                 var size = parseInt(cheese.style.width);
                 if (size > 50) {
                     cheese.style.width = (size - 10) + 'px';
@@ -258,7 +262,7 @@
                 //eatSound.play();
                 createParticles(parseInt(cheese.style.left), parseInt(cheese.style.top));
             }
-        }
+        });
     </script>
 </body>
 </html>
