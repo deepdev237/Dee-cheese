@@ -1,4 +1,4 @@
-
+//// rainbow shit ///
 let degree = 0;
 
 function changeGradient() {
@@ -10,7 +10,15 @@ function changeGradient() {
 
 setInterval(changeGradient, 1000 / 60); // Change every frame (60fps)
 
+/////////////////money/////////////////////////
+
 function getMoney() {
+    let money = localStorage.getItem("moneyBalance");
+    if (money == null) {
+        money = 0;
+        localStorage.setItem("moneyBalance", money);
+        return 0;
+    }
     return localStorage.getItem("moneyBalance");
 }
 
@@ -28,6 +36,8 @@ function removeMoney(amount) {
     let moneyBalance = getMoney();
     setMoney(parseInt(moneyBalance) - amount);
 }
+
+/////////////////cart/////////////////////////
 
 function GetCart() {
     let cart = localStorage.getItem('cart');
@@ -47,8 +57,25 @@ function AddToCart(name, price, img, description) {
     // Get the cart from local storage
     let cart = GetCart();
 
-    // Add the new item to the cart
-    cart.push({ name, price, img, description, quantity: 1});
+    let item = {
+        name: name,
+        price: price,
+        img: img,
+        description: description
+    };
+
+    let itemInCart = false;
+    for (let i = 0; i < cart.length; i++) {
+        if (cart[i].name === item.name) {
+            cart[i].quantity++;
+            itemInCart = true;
+        }
+    }
+
+    if (!itemInCart) {
+        item.quantity = 1;
+        cart.push(item);
+    }
 
     // Save the cart back to local storage
     localStorage.setItem('cart', JSON.stringify(cart));
@@ -115,31 +142,25 @@ function UpdateCart() {
         // Add the cart item to the cart
         cartElement.appendChild(cartItem);
     }
-
-    UpdateTotal()
 }
 
-function SignUp (username, password) {
-    // Get the user from local storage
-    let user = localStorage.getItem('user');
+/////////////////inventory/////////////////////////
 
-    // If there are no user, create an empty array
-    if (user === null) {
-        user = [];
+function GetInventory() {
+    let inventory = localStorage.getItem('inventory');
+
+    if (inventory === null) {
+        inventory = [];
+        localStorage.setItem('inventory', JSON.stringify(inventory));
     } else {
-        // If the user is not null, parse it as JSON
-        user = JSON.parse(user);
+        // If the inventory is not null, parse it as JSON
+        inventory = JSON.parse(inventory);
     }
 
-    // Add the new user to the user array
-    user.push({ username, password });
-
-    // Save the user back to local storage
-    localStorage.setItem('user', JSON.stringify(user));
-
-    // Return the new user
-    return { username, password };
+    return inventory;
 }
+
+/////////////////user/////////////////////////
 
 function getUser() {
     let user = localStorage.getItem('user');
@@ -148,29 +169,86 @@ function getUser() {
         user = [];
         localStorage.setItem('user', JSON.stringify(user));
     } else {
-        // If the user is not null, parse it as JSON
+        // If the user is not null convert it to an object
         user = JSON.parse(user);
     }
 
     return user;
 }
 
-function Login(username, password) {
+function SignUp(username, password) {
+    // Get the user from local storage
     let user = getUser();
 
-    if (user.username === username && user.password === password) {
-        return true;
-    }
+    //if user is an empty array object then create a new user
+    if (user == []) {
+        // Add the new user to the user array
+        user.push({ username, password });
 
-    // set loggedIn to true
-    localStorage.setItem('loggedIn', true);
+
+        // Save the user back to local storage
+        localStorage.setItem('user', JSON.stringify(user));
+
+        // Return the new user
+        return { username, password };
+    } else {
+        alert("error");
+    }
+}
+
+function Login(username, password) {
+    let user = getUser();
+    console.log(user);
+    if (user.username === username && user.password === password) {
+        localStorage.setItem('loggedIn', 'true');
+        return true;
+    } else {
+        alert("wrong username or password");
+        console.log("wrong username or password");
+    }
 
     return false;
 }
 
 function Logout() {
-    localStorage.setItem('loggedIn', false);
+    localStorage.setItem('loggedIn', 'false');
 }
+
+function isLoggedIn() {
+    let loggedIn = localStorage.getItem('loggedIn');
+    if (loggedIn === null) {
+        loggedIn = 'false';
+        localStorage.setItem('loggedIn', loggedIn);
+    }
+    return localStorage.getItem('loggedIn') === 'true';
+}
+
+function changeAccountInNavbar() {
+    let loggedIn = isLoggedIn();
+    //console.log('loggedIn: ' + loggedIn);
+    let user = getUser();
+    let account = document.querySelector(".account");
+    let accountLink = account.querySelector("a");
+    //console.log('user: ' + user);
+    //console.log('accountLink: ' + accountLink);
+
+    if (accountLink) {
+        //console.log("accountLink exists");
+
+        if (loggedIn == true) {
+            accountLink.innerHTML = user.username;
+        } else {
+            if (user.username) {
+                accountLink.innerHTML = "Login";
+            } else {
+                accountLink.innerHTML = "Sign Up";
+            }
+        }
+    }
+}
+
+
+/////////////////onload/////////////////////////
 
 window.onload = function () {
 
@@ -183,7 +261,6 @@ window.onload = function () {
         loggedIn = "false";
         localStorage.setItem("loggedIn", loggedIn);
     }
-
     if (loggedIn === "true") {
         document.querySelector("#moneyBalance").innerHTML = getMoney();
     }
@@ -191,26 +268,6 @@ window.onload = function () {
     if (loggedIn === "false") {
         document.querySelector("#moneyBalance").style.display = "none";
     }
-    // if not logged in and there is a user in localStorage change <a href="account.html">Account</a> innerHTML to Login
-    if (loggedIn === "false" && user !== null) {
-        let account = document.querySelector(".account");
-        let accountLink = account.querySelector("a");
-        accountLink.innerHTML = "Login";
-    }
-    // if not logged in and there is no user in localStorage change <a href="account.html">Account</a> innerHTML to Sign Up
-    if (loggedIn === "false" && user === null) {
-        let account = document.querySelector(".account");
-        console.log(account);
-        let accountLink = account.querySelector("a");
-        console.log(accountLink);
-        accountLink.innerHTML = "Sign Up";
-    }
-    // if logged in and there is a user in localStorage change <a href="account.html">Account</a> innerHTML to the username
-    if (loggedIn === "true" && user !== null) {
-        let account = document.querySelector(".account");
-        let accountLink = account.querySelector("a");
 
-        let user = JSON.parse(user);
-        accountLink.innerHTML = user.username;
-    }
+    changeAccountInNavbar()
 }

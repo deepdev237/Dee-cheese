@@ -74,6 +74,7 @@
 
     <div class="content">
         <form class="cart">
+            <!--
             <div class="cart-item">
                 <img src="img/Whimsical Wonder Cheese.png" alt="Cheese 1">
                 <h3>Whimsical Wonder Cheese</h3>
@@ -89,6 +90,7 @@
                 <p>Quantity: 1</p>
                 <button>Remove</button>
             </div>
+            -->
         </form>
     </div>
 
@@ -102,9 +104,9 @@
         document.querySelector(".cart").innerHTML = "";
 
         // if you are not logged in, redirect to login page
-        if (!localStorage.getItem("loggedIn")) {
-            window.location.href = "account.html";
+        if (!isLoggedIn()) {
             alert("Please sign up or log in to view your inventory.");
+            window.location.href = "account.html";
         }
 
         //get inventory from local storage

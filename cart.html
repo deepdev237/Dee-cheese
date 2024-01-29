@@ -1,18 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>deepcheese Cart</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body id="dynamic-bg">
     <style>
         body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
             margin: 0;
             font-family: 'Arial', sans-serif;
             background-color: #f8f8f8;
             color: #333;
+        }
+
+        .content {
+            flex-grow: 1;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
         }
 
         .navbar {
@@ -80,8 +92,6 @@
             background-color: #333;
             color: #fff;
             padding: 10px;
-            position: absolute;
-            bottom: 0;
             width: 100%;
         }
     </style>
@@ -103,6 +113,7 @@
 
     <div class="content">
         <form class="cart">
+            <!--
             <div class="cart-item">
                 <img src="img/Whimsical Wonder Cheese.png" alt="Cheese 1">
                 <h3>Whimsical Wonder Cheese</h3>
@@ -120,10 +131,11 @@
                 <input type="number" id="quantity" name="quantity" value="1" min="0">
                 <button>Remove</button>
             </div>
+            -->
         </form>
         <div class="submitForm">
-            <button>Empty Cart</button>
-            <button>Checkout</button>
+            <button id="empty_cart">Empty Cart</button>
+            <button id="checkout">Checkout</button>
 
             <p id="total">Total: </p>
         </div>
@@ -136,7 +148,7 @@
     <script src="script.js"></script>
     <script>
         //name, price, img, description
-
+        
         function EmptyCart() {
             localStorage.setItem('cart', JSON.stringify([]));
 
@@ -146,7 +158,7 @@
 
         function UpdateTotal() {
             let total = 0;
-            let cart = JSON.parse(localStorage.getItem('cart'));
+            let cart = GetCart();
 
             for (let i = 0; i < cart.length; i++) {
                 total += cart[i].price * cart[i].quantity;
@@ -160,7 +172,8 @@
 
         function BuyItem(name, price, img, description, quantity) {
             //get cart from local storage
-            let cart = JSON.parse(localStorage.getItem('cart'));
+            let cart = GetCart();
+            let inventory = GetInventory();
 
             //create item object
             let item = {
@@ -171,14 +184,6 @@
                 quantity: quantity
             };
 
-            //add item to inventory
-            //get inventory
-            let inventory = JSON.parse(localStorage.getItem('inventory'));
-
-            //loop through inventory
-            //check if inventory has any of the products we are buying
-            //if it does we add one to the quantity of the item
-            //if it doesn't we add the item to the inventory
             let found = false;
 
             for (let i = 0; i < inventory.length; i++) {
@@ -188,6 +193,7 @@
                 }
             }
 
+            //if item is not in inventory, add it
             if (!found) {
                 inventory.push(item);
             }
@@ -202,7 +208,7 @@
             cart.innerHTML = '';
 
             //get cart from local storage
-            let cartItems = JSON.parse(localStorage.getItem('cart'));
+            let cartItems = GetCart();
 
             //loop through cart items
             for (let i = 0; i < cartItems.length; i++) {
@@ -224,23 +230,24 @@
                 p.innerHTML = '$' + cartItems[i].price;
 
                 //create label element
+                let id = 'quantity' + i;
                 let label = document.createElement('label');
-                label.setAttribute('for', 'quantity');
+                label.setAttribute('for', id);
                 label.innerHTML = 'Quantity:';
 
                 //create input element
                 let input = document.createElement('input');
                 input.setAttribute('type', 'number');
-                input.setAttribute('name', 'quantity');
-                input.setAttribute('id', 'quantity');
-                console.log(cartItems[i].quantity);
+                input.setAttribute('name', 'Quantity');
+                input.setAttribute('id', id);
+                //console.log(cartItems[i].quantity);
                 input.setAttribute('value', cartItems[i].quantity);
                 input.setAttribute('min', '0');
 
                 //quantity listen for change event and update local storage
-                input.addEventListener('change', function() {
+                input.addEventListener('change', function () {
                     //get cart from local storage
-                    let cartItems = JSON.parse(localStorage.getItem('cart'));
+                    let cartItems = GetCart();
 
                     //update quantity
                     cartItems[i].quantity = input.value;
@@ -258,9 +265,9 @@
 
                 //add event listener to button
                 //REMOVING ITEM FROM CART
-                button.addEventListener('click', function() {
+                button.addEventListener('click', function () {
                     //get cart from local storage
-                    let cartItems = JSON.parse(localStorage.getItem('cart'));
+                    let cartItems = GetCart();
 
                     //remove item from cart
                     cartItems.splice(i, 1);
@@ -289,20 +296,20 @@
         }
 
         //empty cart button
-        let emptyCartButton = document.querySelector('.submitForm button:first-of-type');
-        emptyCartButton.addEventListener('click', function() {
+        let emptyCartButton = document.querySelector('#empty_cart');
+        emptyCartButton.addEventListener('click', function () {
             EmptyCart();
             UpdateTotal();
         });
 
         //checkout button
-        let checkoutButton = document.querySelector('.submitForm button:last-of-type');
-        checkoutButton.addEventListener('click', function() {
+        let checkoutButton = document.querySelector('#checkout');
+        checkoutButton.addEventListener('click', function () {
             //get total
             let total = UpdateTotal();
 
             //get money balance
-            let moneyBalance = parseInt(document.querySelector('#moneyBalance').innerHTML);
+            let moneyBalance = getMoney();
 
             //check if money balance is greater than total
             if (moneyBalance >= total) {
@@ -325,12 +332,11 @@
                 alert('You do not have enough money to checkout!');
             }
         });
+        
 
-        window.onload = function() {
-            GetCart();
-            fillUpCart();
-            UpdateTotal();
-        }
+        fillUpCart();
+        UpdateTotal();
     </script>
 </body>
+
 </html>

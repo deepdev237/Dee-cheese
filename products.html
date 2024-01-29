@@ -153,7 +153,7 @@
 
     <script src="script.js"></script>
     <script>
-
+        ///////HTML ELEMENTS///////
         let products = [
             {
                 "name": "Whimsical Wonder Cheese",
@@ -213,28 +213,26 @@
             //game upgrades
 
             {
-                "name": "Upgrade Silver", // this is the first upgrade
+                "name": "Upgrade Silver",
                 "description": "This upgrade will increase your reward for eating cheese by 5 money/quantity.",
                 "price": 35,
                 "img": "img/Silver.jpg"
             },
 
             {
-                "name": "Upgrade Gold", // this is the second upgrade
+                "name": "Upgrade Gold",
                 "description": "This upgrade will increase your reward for eating cheese by 10 money/quantity.",
                 "price": 100,
                 "img": "img/Gold.jpg"
             },
 
             {
-                "name": "Upgrade Diamond", // this is the third upgrade
+                "name": "Upgrade Diamond",
                 "description": "This upgrade will increase your reward for eating cheese by 20 money/quantity.",
                 "price": 500,
                 "img": "img/Diamond.jpg"
             },
         ]
-
-        GetCart();
 
         // insert the cards using the products array
         let content = document.querySelector(".content");
@@ -251,16 +249,21 @@
             content.appendChild(card);
         }
 
-        // Add event listener to buy buttons
+        ///////HTML ELEMENTS END///////
+
+
+        //make the buy buttons work
         let buyButtons = document.querySelectorAll('.product-card button');
+
         for (let i = 0; i < buyButtons.length; i++) {
             buyButtons[i].addEventListener('click', function() {
-                // check if you are logged in
-                let loggedIn = localStorage.getItem("loggedIn");
-                if (loggedIn == null) {
+                let product = products[i];
+
+                if (!isLoggedIn()) {
                     alert("You must be logged in to buy products.");
+                    console.log("You must be logged in to buy products.");
                 } else {
-                    let product = products[i];
+                    console.log("You bought " + product.name);
                     AddToCart(product.name, product.price, product.img, product.description);
                 }
             });

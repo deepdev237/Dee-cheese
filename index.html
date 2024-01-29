@@ -181,6 +181,15 @@
                 }, 10);
             }
         }
+
+        function randomPosition(element) {
+            var borderWidth = 2; // width of the border
+            var y = cheeseGame.offsetHeight - element.offsetHeight - 2 * borderWidth;
+            var x = cheeseGame.offsetWidth - element.offsetWidth - 2 * borderWidth;
+            var randomX = Math.floor(Math.random() * x) + borderWidth;
+            var randomY = Math.floor(Math.random() * y) + borderWidth;
+            return [randomX,randomY];
+        }
         
         window.addEventListener("load", function () {
             GetCart();
@@ -198,18 +207,10 @@
                 event.preventDefault();
             });
 
-            function randomPosition(element) {
-                var borderWidth = 2; // width of the border
-                var y = cheeseGame.offsetHeight - element.offsetHeight - 2 * borderWidth;
-                var x = cheeseGame.offsetWidth - element.offsetWidth - 2 * borderWidth;
-                var randomX = Math.floor(Math.random() * x) + borderWidth;
-                var randomY = Math.floor(Math.random() * y) + borderWidth;
-                return [randomX,randomY];
-            }
-
             cheese.onclick = function() {
-                if (!localStorage.getItem("loggedIn")) {
-                    alert("Please sign up or log in to play the cheese game.");
+                if (!isLoggedIn()) {
+                    console.log("You must be logged in to eat the cheese.")
+                    alert("You must be logged in to eat the cheese.");
                     return;
                 }
                 var size = parseInt(cheese.style.width);

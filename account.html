@@ -20,6 +20,10 @@
             border-radius: 10px;
         }
 
+        form h2 {
+            text-align: center; /* Center the h2 */
+        }
+
         label {
             display: block;
             margin-bottom: 10px;
@@ -46,6 +50,12 @@
             cursor: pointer;
             border-radius: 5px;
         }
+
+        /* Center the submit button */
+        form input[type="submit"] {
+            display: block;
+            margin: 0 auto;
+        }
     </style>
     
     <div class="navbar">
@@ -57,14 +67,25 @@
             </div>
             <li><a href="cart.html">Cart</a></li>
             <li class="account">
-                <a href="account.html">Account</a>
+                <!-- <a href="account.html">Account</a>  -->
                 <span id="moneyBalance">0</span>
             </li>
         </ul>
     </div>
 
-    <div class="content">
+    <h1>Account</h1>
 
+    <div class="content">
+        <form id="accountForm">
+            <!--
+            <h2>Login</h2>
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <input type="submit" value="Login">
+            -->
+        </form>
     </div>
 
     <div class="footer">
@@ -72,5 +93,102 @@
     </div>
 
     <script src="script.js"></script>
+    <script>
+        let newUser = false;
+
+        function checkAccount() {
+            let user = getUser();
+            let userExists = user.username; //if user has username then user exists
+            //console.log(user)
+            //console.log(userExists)
+            //if user does not exist and is logged in [ERROR], log out
+            if (!userExists && isLoggedIn()) {
+                console.log("ERROR: user does not exist and is logged in");
+                Logout();
+            }
+            
+            //user exists and is logged in
+            if (userExists && isLoggedIn()) {
+                //console.log("user exists and is logged in");
+                document.getElementById("accountForm").innerHTML = `
+                    <h2>You are logged in as ${user.username}</h2>
+                    <input type="submit" value="Logout">
+                `;
+            }
+
+            //user exists and is not logged in
+            if (userExists && !isLoggedIn()) {
+                //console.log("user exists and is not logged in");
+                document.getElementById("accountForm").innerHTML = `
+                    <h2>Login</h2>
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                    <input type="submit" value="Login">
+                `;
+            }
+
+            //user does not exist, need to register
+            if (!userExists) {
+                //console.log("user does not exist, need to register");
+                document.getElementById("accountForm").innerHTML = `
+                <h2>Register</h2>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <label for="confirm_password">Confirm Password:</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+                <input type="submit" value="Register">
+                `;
+                newUser = true;
+            }
+        }
+
+        document.getElementById("accountForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            //if submit button is logout, logout
+            if (event.submitter.value == "Logout") {
+                Logout();
+                checkAccount();
+                return;
+            }
+
+            //Registration
+            let username = document.getElementById("username").value;
+            let password = document.getElementById("password").value;
+
+            if (newUser) {
+                let confirmPassword = document.getElementById("confirm_password").value;
+                if (password != confirmPassword) {
+                    alert("Passwords do not match");
+                    console.log("Passwords do not match");
+                    return;
+                }
+
+                let user = {
+                    username: username,
+                    password: password
+                };
+
+                localStorage.setItem("user", JSON.stringify(user));
+                Login(username, password);
+                checkAccount()
+                newUser = false;
+
+                console.log("user created with username: " + username + " and password: " + password); //debugging
+
+                //window.location.href = "index.html";
+            } else {
+                Login(username, password);
+
+                checkAccount()
+            }
+        });
+
+        checkAccount();
+    </script>
 </body>
 </html>
